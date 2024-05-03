@@ -4,6 +4,7 @@ const { Meta } = Card;
 import ProductDetails from './ProductDetails';
 import { useDispatch } from 'react-redux';
 import CardItems from './CardItems';
+import { addToCart } from '../redux/actions/catProductAction';
 
 
 

@@ -6,6 +6,7 @@ import { addToCart } from '../redux/actions/catProductAction';
 import { BASE_URL } from '../constants/constant';
 import axios from 'axios';
 
+
 const ProductDetails = ({productId}) => {
     const [product, setProduct] = useState(null);
     const dispatch =  useDispatch();

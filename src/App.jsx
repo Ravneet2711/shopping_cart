@@ -50,24 +50,10 @@ const App = () => {
       });
   }
 
-  
-
-  const handleLogin = () => {
-    setToken(AUTH_TOKEN);
-    localStorage.setItem('token', token);
-    setShowLoginForm(true);
-  }
-
-  const handleLogOut = () => {
-    setToken(null);
-    localStorage.removeItem(token);
-    setShowLoginForm(false);
-  }
-
   return (
     <>
       <div>
-        <Categories data={data} fetchProducts={fetchProducts} handleLogin={handleLogin} handleLogOut={handleLogOut} token={token} showLoginForm={showLoginForm} />
+        <Categories data={data} fetchProducts={fetchProducts}    showLoginForm={showLoginForm} />
         <ModalLayout/>
       </div>
       <Routes>
