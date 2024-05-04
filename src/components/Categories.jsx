@@ -7,11 +7,13 @@ import { initialCount } from '../redux/actions/catProductAction';
 import { useDispatch,useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import ModalLayout from './Modal';
+import { useLocation } from 'react-router-dom';
 
-const Categories = ({data, fetchProducts,  showLoginForm, handleLogin, handleLogOut,token}) => {
+const Categories = ({data, fetchProducts,  showLoginForm, handleLogOut}) => {
   const dispatch=useDispatch();
   const count = useSelector((state)=> state.count.totalQuantity);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const location = useLocation()
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -37,12 +39,13 @@ const Categories = ({data, fetchProducts,  showLoginForm, handleLogin, handleLog
   const items = CategoryData.map((data, index) => ({
     key: index + 1,
     label:  (
-      <Link to={`/category/${data.toLowerCase()}`} key={index}> 
+      <Link to={`/category/${data.toLowerCase()}`} key={index} className={location.pathname === `/category/${data.toLowerCase()}` ? 'active' : ''}> 
         {data}
       </Link>
     ),
     onClick: () => handleCategoryClick(data.toLowerCase()),
   }));
+
   return (
     <Layout>
       <Header

@@ -1,4 +1,5 @@
-// reducers/categoryReducer.js
+
+
 import * as type from '../type';
 
 const initialState = {
@@ -16,85 +17,82 @@ export const addToCartReducer = (state = initialState, action) => {
         totalPrice: 0,
         cart: [],
       };
-    case type.ADD_TO_CART:
+ 
+      case type.ADD_TO_CART:
+        const existingItemIndex = state.cart.findIndex(item => item.id === action.payload.id);
+        console.log("Existing Item Index:", existingItemIndex);
+
+        if (existingItemIndex !== -1) {
+          const updatedCart = [...state.cart];
+          updatedCart[existingItemIndex].quantity += 1;
+          console.log("Updated Cart:", updatedCart);
+          return {
+            ...state,
+            totalQuantity: state.totalQuantity + 1,
+            totalPrice: state.totalPrice + action.payload.price,
+            cart: updatedCart,
+          };
+        } else {
+          // If item doesn't exist, add it to cart with quantity initialized to 1
+          console.log("Adding new item to cart.");
+          return {
+            ...state,
+            totalQuantity: state.totalQuantity + 1,
+            totalPrice: state.totalPrice + action.payload.price,
+            cart: [...state.cart, { ...action.payload, quantity: 1 }], // Initialize quantity to 1
+          };
+        }
+
+      case type.INCREASE_CART:
+      const { id } = action.payload; 
+      console.log(id)
+      const updatedCartIncremented = state.cart.map(item =>
+        item.id === id ? { ...item, quantity: (item.quantity) + 1 } : item
+      );
+      console.log(updatedCartIncremented)
       return {
         ...state,
         totalQuantity: state.totalQuantity + 1,
-        totalPrice: state.totalPrice + action.payload.price,
-        cart: [...state.cart, action.payload],
+        totalPrice: state.totalPrice + (action.payload.price), // Increment total price by item's price
+        cart: updatedCartIncremented,
       };
-    case type.REMOVE_FROM_CART:
+
+      case type.DECREASE_CART:
+        const updatedCartDecreased = state.cart.map(item => {
+          if (item.id === action.payload.id && item.quantity > 1) {
+            return { ...item, quantity: item.quantity - 1 }; 
+          }
+          return item;
+        });
+      
+        return {
+          ...state,
+          totalQuantity: state.totalQuantity - 1,
+          totalPrice: state.totalPrice - action.payload.price, // Decrement total price by item's price
+          cart: updatedCartDecreased,
+        };
+
+      case type.REMOVE_FROM_CART:
+      const updatedCart = state.cart.filter(item => item.id !== action.payload.id);
+      console.log(updatedCart)
+      const updatedTotalQuantity = state.totalQuantity - action.payload.quantity;
+      const updatedTotalPrice = state.totalPrice - (action.payload.price * action.payload.quantity);
+  
       return {
         ...state,
-        totalQuantity: state.totalQuantity - 1,
-        totalPrice: state.totalPrice - action.payload.price,
-        cart: state.cart.filter(item => item.id !== action.payload.id),
+        totalQuantity: updatedTotalQuantity,
+        totalPrice: updatedTotalPrice,
+        cart: updatedCart,
       };
-    case type.DECREASE_CART:
-      return {
-        ...state,
-        totalQuantity: state.totalQuantity - 1,
-        totalPrice: state.totalPrice - action.payload.price,
-        cart: state.cart.map(item =>
-          item.id === action.payload.id
-            ? { ...item, quantity: item.quantity - 1 }
-            : item
-        ).filter(item => item.quantity > 0), 
-      };
-    case type.INCREASE_CART:
-      return {
-        ...state,
-        totalQuantity: state.totalQuantity + 1,
-        totalPrice: state.totalPrice + action.payload.price,
-        cart: state.cart.map(item =>
-          item.id === action.payload.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        ),
-      };
+  
+      
     default:
       return state;
   }
 };
 
 
-// export const addToCartReducer = (state= initialState, action)=>{
-//     switch (action.type) {
-//       case type.INITIAL_COUNT:
-//         return {
-//           ...state
-//         };
-//       case type.ADD_TO_CART:
-//         return {
-//           ...state,
-//           totalQuantity:state.totalQuantity+1,
-//           totalPrice:state.totalPrice + action.payload?.price ,
-//           cart: [...state.cart, action.payload]
-//         };
-//       case type.REMOVE_FROM_CART:
-//         return {
-//           ...state,
-//           cart: state.cart.filter(item => item.id !== action.payload)
-//         };
-//       case type.DECREASE_CART:
-//         return {
-//           ...state,
-//           totalQuantity:state.totalQuantity-1,
-//           totalPrice:state.totalPrice>0 ?state.totalPrice - action.payload?.price : 0 ,
-//           cart: [...state.cart, action.payload]
-//         }
-//       case type.INCREASE_CART:
-//         return {
-//           ...state,
-//           cart: state.cart.map(item =>
-//             item.id === action.payload ? { ...item, quantity: item.quantity + 1 } : item
-//           )
-//         };
-//       default:
-//         return state;
-//     }
-  
-//   }
+
 
 
 

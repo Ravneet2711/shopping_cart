@@ -1,4 +1,4 @@
-import { Button,Card} from 'antd';
+import { Button,Card,Spin} from 'antd';
 const { Meta } = Card;
 import React,{useState, useEffect} from 'react'
 import { useDispatch } from 'react-redux';
@@ -24,7 +24,10 @@ const ProductDetails = ({productId}) => {
   },[]); 
 
   if (!product) {
-    return <div>Loading...</div>; 
+      return <div style={{textAlign: "center",
+                  margin: "200px auto",
+                  display: "block"
+              }}> <Spin size="large"/> </div>; 
   }
     
 
